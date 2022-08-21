@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <style>
+        #pageloader {
+            background: rgba(255, 255, 255, 0.8);
+            display: none;
+            height: 100%;
+            position: fixed;
+            width: 100%;
+            z-index: 9999;
+        }
+
+        #pageloader img {
+            left: 50%;
+            margin-left: -32px;
+            margin-top: -32px;
+            position: absolute;
+            top: 50%;
+        }
+
+  
+        .popup-form {
+            display: flex !important;
+            justify-items: center !important;
+            align-items: center;
+            position: relative;
+            padding: var(--padding);
+            z-index: 11;
+            margin: 0 auto !important;
+            position: relative;
+
+        }
+
+        .middle {
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            position: absolute !important;
+            background: yellow !important;
+            text-align: center !important;
+            padding: 0 !important;
+        }
+
+
+        .form {
+            position: relative;
+            width: 100%;
+            margin: auto;
+        }
+
+
+        .form .buttons {
+            display: flex;
+            justify-content: space-between;
+            height: var(--button-height);
+            margin: var(--padding-small) 0 0 0;
+            flex-direction: row-reverse;
+        }
+
+        .form .buttons .button-back {
+            /* padding:0 var(--padding-xsmall); */
+            display: inline-block;
+            text-align: left;
+            height: var(--button-height);
+            line-height: var(--button-height);
+            font-size: var(--xsmall);
+            background-color: transparent;
+            color: var(--color-1c);
+        }
+
+        .popup-form .buttons .button-back * {
+            display: inline-block;
+            margin-right: var(--padding-xsmall);
+            color: var(--color-1c);
+        }
+
+
+        .form .buttons .button {
+            background-color: var(--color-1a);
+            color: var(--color-0a);
+            transition: ease all 0.22s;
+            cursor: pointer;
+            box-shadow: 4px 4px 14px 0 rgb(0 0 0 / 20%) !important;
+        }
+
+        .button-next {
+            background-color: var(--color1) !important;
+            color: white !important;
+            width: 100%;
+            border-radius: 0;
+            margin: 0 !important;
+        }
+
+        .button-next:hover {
+            background-color: var(--color1) !important;
+            color: white !important;
+        }
+
+        .form .buttons .button * {
+            color: var(--color-0a);
+            margin-left: var(--padding-xsmall);
+            transition: ease all 0.22s;
+        }
+
+        .form .buttons .button:hover * {
+            margin-left: var(--padding-small);
+        }
+
+        .submit_disabled {
+            opacity: 0.5;
+        }
+
+        .load {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+            background: #000;
+            position: fixed;
+            z-index: 22;
+            pointer-events: none;
+            transition: all 0.75s ease-in-out;
+
+        }
+
+        .splash-logo {
+            z-index: 56;
+        }
+
+        .spinners {
+            display: inline-flex;
+            animation: loading 0.5s ease-in 4s forwards;
+            z-index: 55;
+            margin-top: 32px;
+
+        }
+
+
+
+        @keyframes square {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.25);
+            }
+
+            60% {
+                transform: scale(1);
+            }
+        }
+
+        .square1 {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+            border: 2px solid white;
+            border-radius: 100px;
+            animation: square 1s ease-in 0s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .square1 {
+                background-color: #fff;
+            }
+        }
+
+        .square2 {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+            border: 2px solid white;
+            border-radius: 100px;
+            animation: square 1s ease-in 0.2s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .square2 {
+                background-color: #fff;
+            }
+        }
+
+        .square3 {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+            border: 2px solid white;
+            border-radius: 100px;
+            animation: square 1s ease-in 0.4s infinite;
+        }
+
+        @media (max-width: 768px) {
+            .square3 {
+                background-color: #fff;
+            }
+        }
+
+        .scroll {
+            overflow: hidden;
+        }
+    </style>
+
+    <!-- <div class="loader">
+    <div class="spinner">
+        <div class="spinner-1"></div>
+        <div class="spinner-2"></div>
+        <div class="spinner-3"></div>
+    </div>
+</div> -->
+
+
+
+
+
+
+    <style>
+        /* Hide #form_success_message unless form has been successfully submitted */
+
+
+
+        /* Hide #popup-form on submit */
+        .form-submitted #popup-form {
+            display: none !important;
+        }
+
+        /* Prepare temp fullscreen loader for when user clicks submit */
+        .form-loader {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.95) !important;
+            opacity: 0;
+            z-index: 0;
+            transition: 0.2s ease-in-out all;
+        }
+
+        /* On submit - Display temp fullscreen loader */
+        .form-submitted .form-loader {
+            opacity: 1;
+            z-index: 999;
+        }
+
+        /* Hide Loader when ready  */
+        .form-submitted-success .form-loader {
+            opacity: 0;
+            z-index: 0;
+        }
+
+        .form-loader .spinners {
+            background: transparent;
+        }
+
+
+        /* Hide #form_success_message unless form is successfully submitted */
+        #popup-success_message {
+            opacity: 0;
+            z-index: 0;
+            pointer-events: none;
+            display: none;
+        }
+
+        /* Display #form_success_message once form is successfully submitted */
+        .form-submitted-success #popup-success_message {
+            display: block;
+            opacity: 1;
+            z-index: initial;
+            pointer-events: initial;
+        }
+    </style>
+
+    <style>
+        /* Disable Form Button until all fields have values */
+        .submit_disabled {
+            opacity: 0.75;
+        }
+
+        .input-area {
+            display: grid;
+            justify-content: stretch;
+            align-items: center;
+            flex-grow: 3;
+            vertical-align: middle;
+            border: 1px solid var(--color-0c) !important;
+            height: var(--input-height);
+            line-height: var(--input-height);
+            display: flex;
+            justify-content: stretch;
+            align-items: center;
+            margin: 0 0 var(--padding-small) !important;
+            padding: var(--padding-small) !important;
+        }
+
+
+        .input-value-no {
+            border: 1px solid var(--color-warning) !important;
+        }
+
+
+
+        .input-area input,
+        .form .input-area input,
+        .form .input-area select,
+        form .input-area input[type=number],
+        input[type=search] {
+            margin: 0 !important;
+            padding: 0 0 0 4px !important;
+            height: var(--input-height) !important;
+            line-height: var(--input-height) !important;
+            border: none;
+            font-size: var(--p);
+        }
+
+        .input-area svg {
+            color: var(--color-0b) !important;
+            margin-right: var(--padding-xsmall);
+
+        }
+    </style>
+
+
+
+<script>
+    // For Live Projects
+    window.addEventListener('load', function () {
+        document.querySelector('body').classList.add("loaded")
+    });
+</script>
+<!-- LOADER SCRIPT ABOVE -->
+<!-- LOADER SCRIPT BELOW -->
+<!-- LOADER SCRIPT BELOW -->
+
+
+
+
+<link rel="preload" as="style" href="https://www.flames.agency/wp-content/themes/LW-Flames/dist/min.css?ver=087"
+    onload="this.rel='stylesheet'">
+
+
+
+    <section class="bg-white">
+        <div class="buttons bg-white">
+            <a href="javascript:void(0);" data-modal="modal-instagram-promo" class="button modal-trigger">Click Me to
+                open
+                popup</a>
+        </div>
+    </section>
+
+
+    <aside id="modal-instagram-promo" class="modal modal-popup">
+
+        <!-- Background Overlay -->
+        <div class="modal__transparent-layer modal-close"></div>
+
+        <div id="popup-form" class="popup-form bg-white w-max" data-theme="light">
+            <form name="google-sheet" class="form" id="form">
+
+                <!-- Hide form-fieldsets when form is sucessfully submitted -->
+                <div class="form-fieldsets">
+
+                    <fieldset id="fieldset_1">
+
+                        <p class="form-step">SEXY SHOUTOUT</p>
+
+                        <header class="header">
+                            <h2>Free Instagram Promotion</h2><br>
+                            <small>Complete this simple form to receive your personalised promotion.</small>
+
+                        </header>
+
+                        <div class="grid grid-gap">
+
+                            <!-- <input type="text" name="data[model_name]" placeholder="You name" id="model_name"
+                            class="required colspan-6" onkeyup="showMe(this)"> -->
+
+                            <div class="colspan-6 input-area">
+                                <input type="text" placeholder="Your name" class="required" id="name" name="name">
+                            </div>
+
+                            <div class="colspan-6 input-area">
+                                <i class="fas fa-at"></i>
+                                <input type="text" placeholder="Instagram Username" class="required" id="instagram"
+                                    name="instagram">
+                            </div>
+
+                            <div class="colspan-12 input-area">
+                                <i class="far fa-envelope"></i>
+                                <input type="email" placeholder="Your Email" class="required" id="email" name="email">
+                            </div>
+
+                        </div>
+
+                        <div class="buttons bg-white">
+                            <!-- CTA 1 is a Modal  -->
+                            <button class="button button-next submit_disabled" type="submit" id="submit">GET YOUR FREE SHOUTOUT <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </fieldset>
+                    <!-- Hide above fieldset when form is submitted -->
+
+                    <!-- Date and Time Stamps for additional form data -->
+                    <input name="data[timestamp]" type="hidden" class="print_timestamp" value=""></input>
+                    <input name="data[date]" type="hidden" class="print_current_date" value=""></input>
+                    <input name="data[time]" type="hidden" class="print_current_time" value=""></input>
+
+                </div><!-- Hide this div when form submits -->
+            </form>
+        </div>
+
+        <!-- Only Show this when form is successfully Submitted -->
+        <aside id="popup-success_message" class="bg-white w-max" data-theme="light">
+            <header class="header w-safe bg-white" data-theme="light">
+                <strong class="kicker ">Hooray!! 😊</strong>
+                <h5 class="hero-headline headline ">All Done!</h5>
+                <div class="lead w-safe ">
+                    <p>Thanks for sending your application, <span class="print_first_name"></span>. Make sure you're
+                        follwing us on Instagram and we’ll be in touch soon.</p>
+                </div>
+                <div class="buttons">
+                    <!-- CTA 1 is a Link  -->
+                    <a href="https://www.flames.agency/promotions/instagram-shoutouts/" target="_self" class="button"><i
+                            class="fab fa-instagram"></i> Follow @ThaiFlames</a>
+                    <!-- CTA 2 is a Link  -->
+                    <a href="mailto:hello@flames.agency" target="_blank" class="button">Visit homepage</a>
+                </div>
+            </header>
+        </aside>
+
+
+        <!-- Loader Appears when form is waiting to be validated -->
+        <div class="form-loader">
+            <div class="spinners">
+                <div class="square1"></div>
+                <div class="square2"></div>
+                <div class="square3"></div>
+            </div>
+        </div>
+
+    </aside><!-- Modal Popup -->
+
+
+
+
+
+    <!-- <script  src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
+    <script>
+        //faisal336 ifbasit@gmail.com
+        document.getElementById('form').onsubmit = function (e) {
+            e.preventDefault();
+            var required = document.getElementsByClassName('required');
+            var valid = Array.from({
+                length: required.length
+            }, (v, i) => 0);
+
+            for (var i = 0; i < required.length; i++) {
+                if (required[i].value == '') {
+                    required[i].parentElement.classList.add('input-value-no');
+                    valid[i] = 0;
+                } else {
+                    var classes = required[i].parentElement.classList;
+                    if (classes.contains('input-value-no')) {
+                        required[i].parentElement.classList.remove('input-value-no');
+
+                    }
+                    valid[i] = 1;
+                }
+            }
+            if (!valid.includes(0)) {
+                alert("form submitted?");
+                e.returnValue = true;
+
+                /* Submit to Google Sheet (Below) */
+
+                const scriptURL =
+                    'https://script.google.com/macros/s/AKfycbwqUKDYZHMgywa2psoUM6h7Swt1dkpKrwL4eYfag-GfiHgS2MhGGzzr6Q74deS_ZKnF/exec'
+
+                let form = document.getElementById('form');
+
+                let name = document.getElementById('name');
+                let instagram = document.getElementById('instagram');
+                let email = document.getElementById('email');
+                const modal_popup = document.querySelector(".modal-popup")
+
+                modal_popup.classList.add('form-submitted');
+                e.preventDefault()
+                fetch(scriptURL, {
+                        method: 'POST',
+                        body: new FormData(form)
+                    })
+                    // If success add class to main modal popup so we can hide webform and show success message
+                    .then(response => modal_popup.classList.add('form-submitted-success'))
+                    // If error, display this error message - this doesn't work yet
+                    .catch(error => form.classList.add('form-submitted-success', 'nay'))
+
+                /* Submit to Google Sheet (Above) */
+            }
+        }
+    </script>
+
+
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/js/all.min.js"></script>
+
+
+    <!-- LW Minified Scripts for other parts of the website -->
+    <script src="dist/min.js?5"></script>
+
+    <script>
+        // Modal Window Code
+        const modalTriggers = document.querySelectorAll(".modal-trigger"),
+            modalClose = document.querySelectorAll(".modal-close"),
+            body = document.querySelector("#body");
+        Array.from(modalTriggers).forEach(o => {
+            o.addEventListener("click", function (e) {
+                e.preventDefault();
+                const l = o.dataset.modal;
+                document.querySelector("#" + l).classList.add("modal--is-open");
+                //, body.classList.add(
+                //  "no-overflow")
+            })
+        }), Array.from(modalClose).forEach(o => {
+            o.addEventListener("click", function () {
+                this.closest(".modal").classList.remove("modal--is-open");
+                //, body.classList.remove(
+                //  "no-overflow")
+            })
+        });
+    </script>
+
+
+
+
+
+
+
+</body>
+
+</html>

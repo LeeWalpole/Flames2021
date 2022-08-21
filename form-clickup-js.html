@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        var request = new XMLHttpRequest();
+
+        // request.open('POST', 'https://api.clickup.com/api/v2/task/2g3nt2x&');
+
+        request.open('POST', 'https://api.clickup.com/api/v2/list/175634518/task/2g3nt2x');
+        
+        request.setRequestHeader('Access-Control-Allow-Origin', '*');
+        request.setRequestHeader('Content-Type', 'application/json');
+        request.setRequestHeader('Authorization', 'pk_37791867_METJUG4VOGS2COHTZVBCT2SGLAQII2XR');
+
+
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', 'https://www.flames.agency/wp-content/themes/LW-Flames/form-clickup-js.html', true)
+        xhr.withCredentials = true
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 2) {// do something}
+        }
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.send(json)
+
+
+        request.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                console.log('Status:', this.status);
+                console.log('Headers:', this.getAllResponseHeaders());
+                console.log('Body:', this.responseText);
+            }
+        };
+
+        var body = {
+            'id': '2g3nt2x',
+            'name': 'New Task Name',
+            'status': 'to do',
+            'content': 'New Task Content',
+            'priority': 3,
+            'due_date': '1508369194377'
+        };
+
+        request.send(JSON.stringify(body));
+        
+        alert(response.json());
+    </script>
+
+</body>
+
+</html>

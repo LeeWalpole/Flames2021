@@ -1,0 +1,20 @@
+<script>
+
+var request = new XMLHttpRequest();
+
+request.open('GET', 'https://api.clickup.com/api/v2/list/175634518/task?page=&order_by=&reverse=&subtasks=&statuses%5B%5D=&include_closed=&assignees%5B%5D=&due_date_gt=&due_date_lt=&date_created_gt=&date_created_lt=&date_updated_gt=&date_updated_lt=&custom_fields%5B%5D=');
+
+request.setRequestHeader('Authorization', 'pk_37791867_METJUG4VOGS2COHTZVBCT2SGLAQII2XR');
+request.setRequestHeader('Content-Type', 'application/json');
+
+request.onreadystatechange = function () {
+  if (this.readyState === 4) {
+    console.log('Status:', this.status);
+    console.log('Headers:', this.getAllResponseHeaders());
+    alert('Body:', this.responseText);
+  }
+};
+
+
+
+</script>

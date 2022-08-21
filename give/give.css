@@ -1,0 +1,33 @@
+:root {
+    --button-height: 60px;
+    --button-padding: 30px;
+    --button-radius: 30px;
+}
+
+.bg-gradient {
+    background:linear-gradient(#9F6CFF 0%, #9F6CFF 10%, #FF0AAA 75%, #FF6CCC 100%)!important;
+    background-color:linear-gradient(#9F6CFF 0%, #9F6CFF 10%, #FF0AAA 75%, #FF6CCC 100%)!important;
+}
+
+.give-form-goal-progress-meter:after {
+    background-color:unset!important;
+    background:linear-gradient(#9F6CFF 0%, #9F6CFF 10%, #FF0AAA 75%, #FF6CCC 100%)!important;
+    background-color:linear-gradient(#9F6CFF 0%, #9F6CFF 10%, #FF0AAA 75%, #FF6CCC 100%)!important;
+}
+
+#give-purchase-button.give-btn { 
+    background-color:unset!important;
+    background:linear-gradient(#9F6CFF 0%, #9F6CFF 10%, #FF0AAA 75%, #FF6CCC 100%)!important;
+    background-color:linear-gradient(#9F6CFF 0%, #9F6CFF 10%, #FF0AAA 75%, #FF6CCC 100%)!important;
+    border:none!important;
+    color: #fff!important;
+    font-weight: 900!important;
+    display: inline-block!important;
+    text-align: center;
+    height: var(--button-height)!important;
+    line-height: var(--button-height)!important;
+    padding: 0 var(--button-padding)!important;
+    font-weight: 500!important;
+    border-radius: var(--button-radius)!important;
+}
+
